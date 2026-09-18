@@ -1,0 +1,17 @@
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfvars
+*.tfvars.json
+tfplan
+crash.log
+
+# Worker build
+dist/
+node_modules/
+.dev.vars
+.wrangler/
+
+# OS
+.DS_Store
