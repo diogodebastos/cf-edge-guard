@@ -17,6 +17,14 @@ jobs:
         working-directory: infra
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # worker/dist is gitignored, but worker.tf reads it with filesha256(), so
+      # `terraform validate` cannot evaluate the config until the bundle exists.
+      - name: bundle the Worker so filesha256() can resolve
+        working-directory: worker
+        run: npm ci && npm run build
       - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.16.3

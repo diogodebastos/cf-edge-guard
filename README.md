@@ -353,6 +353,12 @@ single-operator PoC, not a recommendation.
 `terraform validate`, `tsc --noEmit`, an inline-script parse check, and a dry-run bundle.
 **It never runs `terraform apply`** and holds no credentials.
 
+The terraform job bundles the Worker first. `worker/dist` is gitignored, but `worker.tf`
+reads it with `filesha256()`, and `terraform validate` evaluates function calls — so
+without the bundle, validate fails with
+`Call to function "filesha256" failed: open ../worker/dist/index.js: no such file`.
+The first CI run caught exactly that.
+
 The inline-script check exists because of a real bug: the client-side script lives inside a
 TypeScript template literal, and a stray apostrophe inside a single-quoted JS string
 shipped as a `SyntaxError` that silently killed **every** button on the page while the HTML
